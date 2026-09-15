@@ -1,0 +1,20 @@
+services:
+  bot:
+    build: .
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - BOT_TOKEN
+      - API_ID
+      - API_HASH
+      - CHANNELS
+      - ADMINS
+      - LOG_CHANNEL
+      - DATABASE_NAME
+      - DATABASE_URI
+      - HEROKU_API_KEY
+      - PORT
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"
+    restart: unless-stopped

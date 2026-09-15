@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Telethon/Pyrogram Sessions
+*.session
+*.session-journal
+
+# Logs
+*.log
+DreamXlogs.txt
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor Files
+.idea/
+.vscode/
+.agents/
+*.swp

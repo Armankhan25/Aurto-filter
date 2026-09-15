@@ -1,0 +1,85 @@
+{
+  "name": "DreamxBotz Auto Filter Bot",
+  "description": "Telegram auto-filter bot for indexing channel files and searching them quickly.",
+  "stack": "container",
+  "keywords": [
+    "telegram",
+    "auto-filter",
+    "filter",
+    "pyrogram",
+    "media",
+    "search",
+    "channel",
+    "index",
+    "inline"
+  ],
+  "website": "https://github.com/DreamXBotz/Auto_Filter_Bot.git",
+  "repository": "https://github.com/DreamXBotz/Auto_Filter_Bot.git",
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Telegram bot token from BotFather.",
+      "required": true
+    },
+    "API_ID": {
+      "description": "Telegram API ID from https://my.telegram.org.",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Telegram API hash from https://my.telegram.org.",
+      "required": true
+    },
+    "CHANNELS": {
+      "description": "Channel or group usernames/IDs for indexing. Separate multiple values by spaces.",
+      "required": false
+    },
+    "ADMINS": {
+      "description": "Admin Telegram user IDs or usernames. Separate multiple values by spaces.",
+      "required": true
+    },
+    "PICS": {
+      "description": "Optional space-separated image URLs.",
+      "required": false
+    },
+    "LOG_CHANNEL": {
+      "description": "Telegram log channel ID, usually starts with -100.",
+      "required": true
+    },
+    "AUTH_USERS": {
+      "description": "Optional allowed user IDs/usernames for inline search. Separate multiple values by spaces.",
+      "required": false
+    },
+    "AUTH_CHANNELS": {
+      "description": "Optional force subscription channel IDs. Bot must be admin in these channels.",
+      "required": false
+    },
+    "DATABASE_URI": {
+      "description": "MongoDB URI from https://www.mongodb.com.",
+      "required": true
+    },
+    "DATABASE_URI2": {
+      "description": "Optional second MongoDB URI. Required only when MULTIPLE_DB is enabled.",
+      "required": false
+    },
+    "DATABASE_NAME": {
+      "description": "MongoDB database name.",
+      "required": false
+    },
+    "COLLECTION_NAME": {
+      "description": "MongoDB collection name. Use a unique collection name if sharing one database across multiple bots.",
+      "value": "dreamcinezone_files",
+      "required": false
+    }
+  },
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "eco"
+    }
+  }
+}

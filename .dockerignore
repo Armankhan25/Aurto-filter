@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+
+# Sessions & Logs
+*.session
+*.session-journal
+*.log
+DreamXlogs.txt
+
+# Environment files
+.env
+.env.example
+
+# Docker
+docker-compose.yml
+Dockerfile
+
+# Misc
+.agents/
+README.md
+LICENSE
+app.json
+heroku.yml
+Procfile
+.python-version
