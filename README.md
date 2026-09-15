@@ -1,4 +1,4 @@
-<h1 align="center">DreamxBotz Auto Filter Bot</h1>
+<h1 align="center">Arman khan Auto Filter Bot</h1>
 
 <p align="center">
   <b>Powerful Telegram auto-filter, file indexing, verification, premium, and streaming bot.</b>
