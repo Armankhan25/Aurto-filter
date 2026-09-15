@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DreamXBotz/Pics/main/dreamxbotz.jpg" alt="DreamxBotz Logo" width="220">
+  <img src="" alt="Arman Logo" width="220">
 </p>
 
 <p align="center">
