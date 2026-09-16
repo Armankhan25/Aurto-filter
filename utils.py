@@ -543,9 +543,11 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     base = site if site.startswith(('http://', 'https://')) else f'https://{site}'
     host = base.lower()
 
-    # Direct integration for aShort.in (/st?api=...&url=...)
-    if 'ashort.in' in host:
-        endpoint = f'{base}/st'
+    # Direct integration for the uploaded aShort project.
+    # Its API route is GET /api?api=API_KEY&url=LONG_URL and it returns
+    # a JSON response containing "shortenedUrl".
+    if 'ashort.in' in host or 'url-shortnar-ashrot-production.up.railway.app' in host:
+        endpoint = f'{base}/api'
         params = {
             'api': api,
             'url': str(link),
@@ -553,11 +555,27 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
         timeout = aiohttp.ClientTimeout(total=20)
         async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.get(endpoint, params=params) as response:
-                short_link = (await response.text()).strip()
+                raw = await response.text()
+                try:
+                    data = await response.json(content_type=None)
+                except Exception:
+                    data = {}
+
                 if response.status != 200:
-                    raise RuntimeError(f'aShort API failed ({response.status}): {short_link}')
+                    message = data.get('message') if isinstance(data, dict) else raw
+                    raise RuntimeError(f'aShort API failed ({response.status}): {message}')
+
+                if not isinstance(data, dict) or data.get('status') != 'success':
+                    message = data.get('message') if isinstance(data, dict) else raw
+                    raise RuntimeError(f'aShort API failed: {message}')
+
+                short_link = str(
+                    data.get('shortenedUrl') or data.get('short_url') or ''
+                ).strip()
+
                 if not re.match(r'^https?://[^\s]+$', short_link):
                     raise ValueError(f'aShort returned invalid URL: {short_link!r}')
+
                 return short_link
 
     # Existing Shortzy providers.
