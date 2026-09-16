@@ -543,22 +543,21 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     base = site if site.startswith(('http://', 'https://')) else f'https://{site}'
     host = base.lower()
 
-    # Direct integration for the user's self-hosted aShort service.
-    if 'url-shortnar-ashrot-production.up.railway.app' in host:
-        endpoint = f'{base}/api/v1/shorten'
+    # Direct integration for aShort.in (/st?api=...&url=...)
+    if 'ashort.in' in host:
+        endpoint = f'{base}/st'
+        params = {
+            'api': api,
+            'url': str(link),
+        }
         timeout = aiohttp.ClientTimeout(total=20)
         async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.post(
-                endpoint,
-                json={'url': str(link)},
-                headers={'X-API-Key': api},
-            ) as response:
-                data = await response.json(content_type=None)
-                if response.status != 200 or not data.get('success'):
-                    raise RuntimeError(f'Shortener API failed: {data}')
-                short_link = str(data.get('short_url') or '').strip()
+            async with session.get(endpoint, params=params) as response:
+                short_link = (await response.text()).strip()
+                if response.status != 200:
+                    raise RuntimeError(f'aShort API failed ({response.status}): {short_link}')
                 if not re.match(r'^https?://[^\s]+$', short_link):
-                    raise ValueError(f'Shortener returned invalid URL: {short_link!r}')
+                    raise ValueError(f'aShort returned invalid URL: {short_link!r}')
                 return short_link
 
     # Existing Shortzy providers.
