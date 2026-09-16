@@ -549,7 +549,7 @@ async def get_shortlink(link, grp_id, is_second_shortener=False, is_third_shorte
     if 'ashort.in' in host or 'url-shortnar-ashrot-production.up.railway.app' in host:
         endpoint = f'{base}/api'
         params = {
-            'api': api,
+            'api_key': api,
             'url': str(link),
         }
         timeout = aiohttp.ClientTimeout(total=20)
