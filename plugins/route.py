@@ -16,6 +16,12 @@ logger = logging.getLogger(__name__)
 
 routes = web.RouteTableDef()
 
+@routes.get("/3026c0de547b119fd96fb3c75824db2e.html")
+async def exoclick_verification(request):
+    return web.FileResponse(
+        "3026c0de547b119fd96fb3c75824db2e.html"
+    )
+
 @routes.get("/favicon.ico")
 async def favicon_route_handler(request):
     return web.FileResponse('dreamxbotz/template/favicon.ico')
