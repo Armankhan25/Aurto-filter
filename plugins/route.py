@@ -73,7 +73,7 @@ async def stream_handler(request: web.Request):
             id = int(id_match.group(1))
             secure_hash = request.rel_url.query.get("hash")
         
-        return await media_streamer(request, id, secure_hash)
+        return await media_streamer(request, id, secure_hash, download=request.rel_url.query.get("download") == "1")
     except InvalidHash as e:
         raise web.HTTPForbidden(text=e.message)
     except FIleNotFound as e:
@@ -88,7 +88,7 @@ async def stream_handler(request: web.Request):
 
 class_cache = {}
 
-async def media_streamer(request: web.Request, id: int, secure_hash: str):
+async def media_streamer(request: web.Request, id: int, secure_hash: str, download: bool = False):
     range_header = request.headers.get("Range", 0)
     
     index = min(work_loads, key=work_loads.get)
@@ -163,7 +163,7 @@ async def media_streamer(request: web.Request, id: int, secure_hash: str):
             "Content-Type": f"{mime_type}",
             "Content-Range": f"bytes {from_bytes}-{until_bytes}/{file_size}",
             "Content-Length": str(req_length),
-            "Content-Disposition": f'inline; filename="{file_name}"',  # inline for streaming
+            "Content-Disposition": f'attachment; filename="{file_name}"' if download else f'inline; filename="{file_name}"',
             "Accept-Ranges": "bytes",
             # CORS headers for JSMKV
             "Access-Control-Allow-Origin": "*",
