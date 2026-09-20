@@ -24,30 +24,15 @@ async def favicon_route_handler(request):
 async def root_route_handler(request):
     return web.json_response("dreamxbotz")
 
-@routes.get("/watch", allow_head=True)
-async def mini_app_watch_handler(request: web.Request):
-    # Telegram Mini App entry point. The startapp payload is read by the
-    # Telegram WebApp JavaScript API and redirected to the same existing
-    # /watch/<message_id>?hash=<hash> page used by normal browser links.
-    html = """<!doctype html>
-<html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">
-<title>Opening Watch Page...</title>
-<script src=\"https://telegram.org/js/telegram-web-app.js\"></script>
-</head><body>
-<p style=\"font-family:sans-serif;text-align:center;margin-top:40px\">Opening watch page...</p>
-<script>
-(function () {
-  const startParam = (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.start_param) || '';
-  const match = /^watch_(\d+)_([A-Za-z0-9_-]{6})$/.exec(startParam);
-  if (!match) {
-    document.body.innerHTML = '<p style=\"font-family:sans-serif;text-align:center;margin-top:40px\">Invalid Mini App link.</p>';
-    return;
-  }
-  if (window.Telegram && Telegram.WebApp) Telegram.WebApp.ready();
-  window.location.replace('/watch/' + match[1] + '?hash=' + encodeURIComponent(match[2]));
-})();
-</script></body></html>"""
-    return web.Response(text=html, content_type="text/html")
+@routes.get("/miniapp", allow_head=True)
+async def miniapp_route_handler(request):
+    return web.Response(text="""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Opening Watch</title><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><p>Opening watch page…</p><script>
+const tg=window.Telegram&&window.Telegram.WebApp; if(tg){tg.ready();}
+const p=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param;
+const m=p&&p.match(/^w_(\d+)_([A-Za-z0-9_-]{6,})$/);
+if(m){location.replace('/watch/'+m[1]+'?hash='+encodeURIComponent(m[2]));}
+else{location.replace('/');}
+</script></body></html>""", content_type='text/html')
 
 @routes.get(r"/watch/{path:\S+}", allow_head=True)
 async def watch_handler(request: web.Request):
